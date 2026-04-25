@@ -1,0 +1,49 @@
+/* ÉP NỀN AI HIỆN LÊN TOÀN TRANG */
+.stApp {
+    background: url("app/static/background_ai.png") no-repeat center center fixed !important;
+    background-size: cover !important;
+}
+
+/* LÀM TRONG SUỐT CÁC LỚP ĐÈ */
+[data-testid="stAppViewContainer"], [data-testid="stHeader"], [data-testid="stSidebar"] {
+    background-color: rgba(0, 0, 0, 0) !important;
+}
+
+/* TẠO LỚP PHỦ TỐI ĐỂ CHỮ DỄ ĐỌC */
+.main {
+    background-color: rgba(15, 23, 42, 0.75) !important;
+    backdrop-filter: blur(2px);
+}
+
+/* KHỐI NỘI DUNG DẠNG KÍNH MỜ */
+.main-card, .viz-card, [data-testid="stMetric"], [data-testid="stColumn"] {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+    padding: 20px;
+    color: white !important;
+}
+
+.card-title {
+    color: #fbbf24 !important;
+    font-size: 35px;
+    font-weight: 900;
+}
+/* Làm cho ô nhập liệu chat trông sang trọng hơn */
+.stChatInputContainer {
+    padding-bottom: 20px !important;
+    background-color: transparent !important;
+}
+
+.stChatInputContainer > div {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 30px !important;
+}
+
+/* Đổi màu icon gửi tin nhắn thành màu đỏ Viettel */
+[data-testid="stChatInputSubmitButton"] {
+    color: #ee0033 !important;
+}
