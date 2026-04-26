@@ -68,33 +68,79 @@ def analyze_sentiment(text):
     return "Trung lập"
 
 # =============================
-# LOGIN STATE
+# 🛡️ LOGIN STATE
 # =============================
 if "token" not in st.session_state:
     st.session_state.token = None
 
-if "user" not in st.session_state:
-    st.session_state.user = None
+if "users" not in st.session_state:
+    st.session_state.users = {}
 
-# database user giả
-if "users_db" not in st.session_state:
-    st.session_state.users_db = {
-        "admin": "123456"
+if "login_mode" not in st.session_state:
+    st.session_state.login_mode = "login"
+
+
+# =============================
+# 🔐 LOGIN PAGE (NEW UI)
+# =============================
+if not st.session_state.token:
+
+    st.markdown("""
+    <style>
+    .login-box{
+        width:420px;
+        margin:auto;
+        margin-top:80px;
+        padding:40px;
+        background: rgba(255,255,255,0.05);
+        border-radius:20px;
+        backdrop-filter: blur(20px);
+        box-shadow:0 0 40px rgba(255,0,0,0.2);
     }
 
-# =============================
-# LOGIN PAGE
-# =============================
-if not st.session_state.token and not st.session_state.user:
+    .login-title{
+        text-align:center;
+        font-size:32px;
+        font-weight:700;
+        margin-bottom:20px;
+        background: linear-gradient(90deg,#ff0000,#ffffff);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+    }
 
-    st.markdown('<h1 class="welcome-text">Viettel AI Platform</h1>', unsafe_allow_html=True)
+    .login-sub{
+        text-align:center;
+        opacity:0.7;
+        margin-bottom:30px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-    tab1, tab2, tab3 = st.tabs(["🔐 Google", "👤 Đăng nhập", "📝 Đăng ký"])
 
-    # GOOGLE LOGIN
+    st.markdown('<div class="login-box">', unsafe_allow_html=True)
+    st.markdown('<div class="login-title">Viettel AI Platform</div>', unsafe_allow_html=True)
+    st.markdown('<div class="login-sub">Đăng nhập để tiếp tục</div>', unsafe_allow_html=True)
+
+    tab1, tab2 = st.tabs(["Đăng nhập", "Đăng ký"])
+
+    # ================= LOGIN =================
     with tab1:
+
+        email = st.text_input("Email")
+        password = st.text_input("Mật khẩu", type="password")
+
+        if st.button("Đăng nhập"):
+            if email in st.session_state.users and st.session_state.users[email] == password:
+                st.session_state.token = email
+                st.rerun()
+            else:
+                st.error("Sai tài khoản")
+
+        st.markdown("---")
+        st.markdown("Hoặc đăng nhập bằng Google")
+
         result = oauth2.authorize_button(
-            "🔑 Đăng nhập với Google",
+            "🔑 Đăng nhập Google",
             redirect_uri="http://localhost:8501",
             scope="openid email profile"
         )
@@ -103,34 +149,19 @@ if not st.session_state.token and not st.session_state.user:
             st.session_state.token = result["token"]
             st.rerun()
 
-    # LOGIN ACCOUNT
+    # ================= REGISTER =================
     with tab2:
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
 
-        if st.button("Đăng nhập"):
-            if username in st.session_state.users_db and \
-               st.session_state.users_db[username] == password:
-                st.session_state.user = username
-                st.success("Đăng nhập thành công")
-                st.rerun()
-            else:
-                st.error("Sai tài khoản")
-
-    # REGISTER
-    with tab3:
-        new_user = st.text_input("Username mới")
-        new_pass = st.text_input("Password mới", type="password")
+        new_email = st.text_input("Email đăng ký")
+        new_pass = st.text_input("Mật khẩu đăng ký", type="password")
 
         if st.button("Tạo tài khoản"):
-            if new_user in st.session_state.users_db:
-                st.warning("User đã tồn tại")
-            else:
-                st.session_state.users_db[new_user] = new_pass
-                st.success("Tạo tài khoản thành công")
+            st.session_state.users[new_email] = new_pass
+            st.success("Tạo tài khoản thành công")
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.stop()
-
 # =============================
 # SIDEBAR
 # =============================
