@@ -1,52 +1,49 @@
-/* ÉP NỀN AI HIỆN LÊN TOÀN TRANG */
+/* BACKGROUND */
 .stApp {
-    background: url("app/static/background_ai.png") no-repeat center center fixed !important;
-    background-size: cover !important;
+    background: url("app/static/background_ai.png") no-repeat center center fixed;
+    background-size: cover;
+    color: #f8fafc;
 }
 
-/* LÀM TRONG SUỐT CÁC LỚP ĐÈ */
-[data-testid="stAppViewContainer"], [data-testid="stHeader"], [data-testid="stSidebar"] {
-    background-color: rgba(0, 0, 0, 0) !important;
+/* overlay */
+[data-testid="stAppViewContainer"]{
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(3px);
 }
 
-/* TẠO LỚP PHỦ TỐI ĐỂ CHỮ DỄ ĐỌC */
-.main {
-    background-color: rgba(15, 23, 42, 0.75) !important;
-    backdrop-filter: blur(2px);
+/* header */
+[data-testid="stHeader"]{
+    background: transparent;
 }
 
-/* KHỐI NỘI DUNG DẠNG KÍNH MỜ */
-.main-card, .viz-card, [data-testid="stMetric"], [data-testid="stColumn"] {
-    background: rgba(255, 255, 255, 0.05) !important;
-    backdrop-filter: blur(15px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 20px !important;
-    padding: 20px;
-    color: white !important;
+/* sidebar */
+[data-testid="stSidebar"]{
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(20px);
 }
 
-.card-title {
-    color: #fbbf24 !important;
-    font-size: 35px;
-    font-weight: 900;
+/* TEXT */
+.welcome-text {
+    text-align: center;
+    font-size: 3rem !important;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ee0000, #ffffff);
+    .welcome-text {
+    text-align: center;
+    font-size: 3rem !important;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ee0000, #ffffff);
+
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    color: transparent;
+    -webkit-text-fill-color: transparent;
 }
-/* Làm cho ô nhập liệu chat trông sang trọng hơn */
-.stChatInputContainer {
-    padding-bottom: 20px !important;
-    background-color: transparent !important;
+    -webkit-text-fill-color: transparent;
 }
 
-.stChatInputContainer > div {
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    backdrop-filter: blur(10px);
-    border-radius: 30px !important;
-}
-
-/* Đổi màu icon gửi tin nhắn thành màu đỏ Viettel */
-[data-testid="stChatInputSubmitButton"] {
-    color: #ee0033 !important;
-}
+/* HERO */
 .hero-box{
     background: linear-gradient(135deg, rgba(255,0,0,0.15), rgba(255,255,255,0.02));
     border-radius:20px;
@@ -55,6 +52,7 @@
     border:1px solid rgba(255,255,255,0.05);
 }
 
+/* STAT */
 .stat-card{
     background: rgba(255,255,255,0.05);
     padding:25px;
@@ -76,5 +74,46 @@
 
 .sub-text{
     opacity:0.7;
-    margin-top:5px;
+}
+
+/* LOGIN */
+.login-box{
+    width:420px;
+    margin:auto;
+    margin-top:60px;
+    padding:40px;
+    background: linear-gradient(135deg,#ee0033,#c4002b,#8b001d);
+    color:white;
+    border-radius:20px;
+    backdrop-filter: blur(20px);
+    box-shadow:0 0 60px rgba(255,0,0,0.4);
+}
+
+.divider{
+    text-align:center;
+    margin:20px 0;
+    color:white;
+}
+
+/* LOADER */
+.ai-loader {
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+
+.ai-dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:white;
+    animation: bounce 1.2s infinite;
+}
+
+.ai-dot:nth-child(2){animation-delay:.2s}
+.ai-dot:nth-child(3){animation-delay:.4s}
+
+@keyframes bounce{
+0%,80%,100%{transform:scale(0)}
+40%{transform:scale(1)}
 }
