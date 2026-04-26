@@ -39,6 +39,7 @@ st.markdown("""
     background: #020617;
     color: #f8fafc;
 }
+
 .welcome-text {
     text-align: center;
     font-size: 3rem !important;
@@ -47,11 +48,45 @@ st.markdown("""
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
 .glass-card {
     background: rgba(255,255,255,0.05);
     border-radius: 15px;
     padding: 20px;
     text-align: center;
+}
+
+/* LOGIN */
+.login-box{
+    width:420px;
+    margin:auto;
+    margin-top:60px;
+    padding:40px;
+    background: rgba(255,255,255,0.05);
+    border-radius:20px;
+    backdrop-filter: blur(20px);
+    box-shadow:0 0 40px rgba(255,0,0,0.2);
+}
+
+.viettel-logo{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.google-btn{
+    background:white;
+    color:black;
+    border-radius:8px;
+    padding:10px;
+    text-align:center;
+    font-weight:500;
+    border:1px solid #ddd;
+}
+
+.divider{
+    text-align:center;
+    margin:20px 0;
+    opacity:0.6;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -61,14 +96,14 @@ st.markdown("""
 # =============================
 def analyze_sentiment(text):
     text = text.lower()
-    if any(w in text for w in ["tốt", "hay", "ok", "good", "đỉnh"]):
+    if any(w in text for w in ["tốt","hay","ok","good","đỉnh"]):
         return "Tích cực"
-    elif any(w in text for w in ["tệ", "chán", "dở", "bad"]):
+    elif any(w in text for w in ["tệ","chán","dở","bad"]):
         return "Tiêu cực"
     return "Trung lập"
 
 # =============================
-# 🛡️ LOGIN STATE
+# LOGIN STATE
 # =============================
 if "token" not in st.session_state:
     st.session_state.token = None
@@ -76,54 +111,43 @@ if "token" not in st.session_state:
 if "users" not in st.session_state:
     st.session_state.users = {}
 
-if "login_mode" not in st.session_state:
-    st.session_state.login_mode = "login"
-
-
 # =============================
-# 🔐 LOGIN PAGE (NEW UI)
+# LOGIN PAGE
 # =============================
 if not st.session_state.token:
 
-    st.markdown("""
-    <style>
-    .login-box{
-        width:420px;
-        margin:auto;
-        margin-top:80px;
-        padding:40px;
-        background: rgba(255,255,255,0.05);
-        border-radius:20px;
-        backdrop-filter: blur(20px);
-        box-shadow:0 0 40px rgba(255,0,0,0.2);
-    }
-
-    .login-title{
-        text-align:center;
-        font-size:32px;
-        font-weight:700;
-        margin-bottom:20px;
-        background: linear-gradient(90deg,#ff0000,#ffffff);
-        -webkit-background-clip:text;
-        -webkit-text-fill-color:transparent;
-    }
-
-    .login-sub{
-        text-align:center;
-        opacity:0.7;
-        margin-bottom:30px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-
     st.markdown('<div class="login-box">', unsafe_allow_html=True)
-    st.markdown('<div class="login-title">Viettel AI Platform</div>', unsafe_allow_html=True)
-    st.markdown('<div class="login-sub">Đăng nhập để tiếp tục</div>', unsafe_allow_html=True)
+
+    # LOGO SVG
+    st.markdown("""
+    <div class="viettel-logo">
+    <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#ff0000"/>
+    <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    </defs>
+
+    <text x="50%" y="55%" text-anchor="middle"
+    font-size="48"
+    font-weight="700"
+    fill="url(#g1)">
+    VIETTEL
+    </text>
+
+    <text x="50%" y="90%"
+    text-anchor="middle"
+    font-size="14"
+    fill="#aaa">
+    AI PLATFORM
+    </text>
+    </svg>
+    </div>
+    """, unsafe_allow_html=True)
 
     tab1, tab2 = st.tabs(["Đăng nhập", "Đăng ký"])
 
-    # ================= LOGIN =================
     with tab1:
 
         email = st.text_input("Email")
@@ -136,11 +160,10 @@ if not st.session_state.token:
             else:
                 st.error("Sai tài khoản")
 
-        st.markdown("---")
-        st.markdown("Hoặc đăng nhập bằng Google")
+        st.markdown('<div class="divider">Hoặc</div>', unsafe_allow_html=True)
 
         result = oauth2.authorize_button(
-            "🔑 Đăng nhập Google",
+            "🔑 Đăng nhập bằng Google",
             redirect_uri="http://localhost:8501",
             scope="openid email profile"
         )
@@ -149,7 +172,6 @@ if not st.session_state.token:
             st.session_state.token = result["token"]
             st.rerun()
 
-    # ================= REGISTER =================
     with tab2:
 
         new_email = st.text_input("Email đăng ký")
@@ -162,17 +184,17 @@ if not st.session_state.token:
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.stop()
+
 # =============================
 # SIDEBAR
 # =============================
 with st.sidebar:
 
+    st.image("robot_khong_nen.gif", use_container_width=True)
+
     if st.button("🚪 Đăng xuất"):
         st.session_state.token = None
-        st.session_state.user = None
         st.rerun()
-
-    st.markdown("---")
 
     menu = st.radio("Menu", ["🏠 Trang chủ", "💬 Chat AI", "🎥 YouTube"])
 
@@ -182,6 +204,12 @@ with st.sidebar:
 if menu == "🏠 Trang chủ":
 
     st.markdown('<h1 class="welcome-text">Xin chào 👋</h1>', unsafe_allow_html=True)
+
+    _, col_robot, _ = st.columns([1,1.2,1])
+    with col_robot:
+        st.image("robot_khong_nen.gif", use_container_width=True)
+
+    st.markdown("---")
 
     c1, c2, c3 = st.columns(3)
 
@@ -194,14 +222,14 @@ if menu == "🏠 Trang chủ":
 # =============================
 elif menu == "💬 Chat AI":
 
-    st.title("AI Assistant")
+    st.markdown('<h1 class="welcome-text">AI Assistant</h1>', unsafe_allow_html=True)
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
-            st.write(msg["content"])
+            st.markdown(msg["content"])
 
     if prompt := st.chat_input("Hỏi về Viettel..."):
 
@@ -212,8 +240,9 @@ elif menu == "💬 Chat AI":
                 model="gpt-4o-mini",
                 messages=st.session_state.messages[-6:]
             )
+
             reply = res.choices[0].message.content
-            st.write(reply)
+            st.markdown(reply)
 
         st.session_state.messages.append({"role":"assistant","content":reply})
 
@@ -222,7 +251,7 @@ elif menu == "💬 Chat AI":
 # =============================
 elif menu == "🎥 YouTube":
 
-    st.title("YouTube Analysis")
+    st.markdown('<h1 class="welcome-text">YouTube Analysis</h1>', unsafe_allow_html=True)
 
     url = st.text_input("🔗 Nhập link YouTube")
 
