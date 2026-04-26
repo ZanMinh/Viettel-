@@ -11,33 +11,30 @@ from streamlit_oauth import OAuth2Component
 st.set_page_config(page_title="Viettel AI Platform", layout="wide", page_icon="🤖")
 
 # =============================
-# API KEY
-# =============================
-API_KEY = st.secrets.get("OPENAI_API_KEY")
-client = OpenAI(api_key=API_KEY) if API_KEY else None
-
-# =============================
-# GOOGLE LOGIN
-# =============================
-CLIENT_ID = st.secrets.get("G_CLIENT_ID")
-CLIENT_SECRET = st.secrets.get("G_CLIENT_SECRET")
-
-oauth2 = OAuth2Component(
-    CLIENT_ID,
-    CLIENT_SECRET,
-    "https://accounts.google.com/o/oauth2/v2/auth",
-    "https://oauth2.googleapis.com/token",
-    "https://openidconnect.googleapis.com/v1/userinfo",
-)
-
-# =============================
-# STYLE
+# LOAD STYLE
 # =============================
 st.markdown("""
 <style>
+
+/* BACKGROUND FULL */
 .stApp {
-    background: #020617;
-    color: #f8fafc;
+    background: url("app/static/background_ai.png") no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* overlay */
+[data-testid="stAppViewContainer"] {
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(3px);
+}
+
+[data-testid="stHeader"] {
+    background: transparent;
+}
+
+[data-testid="stSidebar"] {
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(20px);
 }
 
 .welcome-text {
@@ -47,13 +44,6 @@ st.markdown("""
     background: linear-gradient(135deg, #ee0000, #ffffff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}
-
-.glass-card {
-    background: rgba(255,255,255,0.05);
-    border-radius: 15px;
-    padding: 20px;
-    text-align: center;
 }
 
 /* LOGIN */
@@ -73,23 +63,75 @@ st.markdown("""
     margin-bottom:15px;
 }
 
-.google-btn{
-    background:white;
-    color:black;
-    border-radius:8px;
-    padding:10px;
-    text-align:center;
-    font-weight:500;
-    border:1px solid #ddd;
-}
-
 .divider{
     text-align:center;
     margin:20px 0;
     opacity:0.6;
 }
+
+/* HERO */
+.hero-box{
+    background: linear-gradient(135deg, rgba(255,0,0,0.15), rgba(255,255,255,0.02));
+    border-radius:20px;
+    padding:30px;
+    backdrop-filter: blur(20px);
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+/* STATS */
+.stat-card{
+    background: rgba(255,255,255,0.05);
+    padding:25px;
+    border-radius:16px;
+    text-align:center;
+    transition:0.2s;
+}
+
+.stat-card:hover{
+    transform: translateY(-5px);
+    box-shadow:0 10px 30px rgba(255,0,0,0.2);
+}
+
+.big-number{
+    font-size:32px;
+    font-weight:700;
+    color:#ff4d4d;
+}
+
+.sub-text{
+    opacity:0.7;
+    margin-top:5px;
+}
+
+/* chat box */
+.stChatInputContainer > div {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+}
+
 </style>
 """, unsafe_allow_html=True)
+
+# =============================
+# API KEY
+# =============================
+API_KEY = st.secrets.get("OPENAI_API_KEY")
+client = OpenAI(api_key=API_KEY) if API_KEY else None
+
+# =============================
+# GOOGLE LOGIN
+# =============================
+CLIENT_ID = st.secrets.get("G_CLIENT_ID")
+CLIENT_SECRET = st.secrets.get("G_CLIENT_SECRET")
+
+oauth2 = OAuth2Component(
+    CLIENT_ID,
+    CLIENT_SECRET,
+    "https://accounts.google.com/o/oauth2/v2/auth",
+    "https://oauth2.googleapis.com/token",
+    "https://openidconnect.googleapis.com/v1/userinfo",
+)
 
 # =============================
 # SENTIMENT
@@ -118,7 +160,6 @@ if not st.session_state.token:
 
     st.markdown('<div class="login-box">', unsafe_allow_html=True)
 
-    # LOGO SVG
     st.markdown("""
     <div class="viettel-logo">
     <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
@@ -182,7 +223,6 @@ if not st.session_state.token:
             st.success("Tạo tài khoản thành công")
 
     st.markdown('</div>', unsafe_allow_html=True)
-
     st.stop()
 
 # =============================
@@ -203,19 +243,58 @@ with st.sidebar:
 # =============================
 if menu == "🏠 Trang chủ":
 
-    st.markdown('<h1 class="welcome-text">Xin chào 👋</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="welcome-text">Viettel AI Dashboard</h1>', unsafe_allow_html=True)
 
-    _, col_robot, _ = st.columns([1,1.2,1])
-    with col_robot:
+    st.markdown('<div class="hero-box">', unsafe_allow_html=True)
+
+    col1, col2 = st.columns([1.2,1])
+
+    with col1:
+        st.markdown("""
+        ### 🤖 AI Phân tích dữ liệu Viettel
+        
+        - Phân tích comment YouTube  
+        - Chat AI nội bộ  
+        - Dashboard realtime  
+        - Sentiment AI  
+        """)
+
+    with col2:
         st.image("robot_khong_nen.gif", use_container_width=True)
 
-    st.markdown("---")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    c1, c2, c3 = st.columns(3)
+    st.markdown("### 📊 Tổng quan hệ thống")
 
-    c1.markdown('<div class="glass-card"><h2>88%</h2><p>Tích cực</p></div>', unsafe_allow_html=True)
-    c2.markdown('<div class="glass-card"><h2>2,150</h2><p>Thảo luận</p></div>', unsafe_allow_html=True)
-    c3.markdown('<div class="glass-card"><h2>145ms</h2><p>Tốc độ AI</p></div>', unsafe_allow_html=True)
+    c1, c2, c3, c4 = st.columns(4)
+
+    c1.markdown("""
+    <div class="stat-card">
+    <div class="big-number">88%</div>
+    <div class="sub-text">Sentiment tích cực</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    c2.markdown("""
+    <div class="stat-card">
+    <div class="big-number">2,150</div>
+    <div class="sub-text">Thảo luận</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    c3.markdown("""
+    <div class="stat-card">
+    <div class="big-number">145ms</div>
+    <div class="sub-text">Tốc độ AI</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    c4.markdown("""
+    <div class="stat-card">
+    <div class="big-number">4</div>
+    <div class="sub-text">Modules AI</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # =============================
 # CHAT AI

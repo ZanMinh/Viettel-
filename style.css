@@ -47,3 +47,34 @@
 [data-testid="stChatInputSubmitButton"] {
     color: #ee0033 !important;
 }
+.hero-box{
+    background: linear-gradient(135deg, rgba(255,0,0,0.15), rgba(255,255,255,0.02));
+    border-radius:20px;
+    padding:30px;
+    backdrop-filter: blur(20px);
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+.stat-card{
+    background: rgba(255,255,255,0.05);
+    padding:25px;
+    border-radius:16px;
+    text-align:center;
+    transition:0.2s;
+}
+
+.stat-card:hover{
+    transform: translateY(-5px);
+    box-shadow:0 10px 30px rgba(255,0,0,0.2);
+}
+
+.big-number{
+    font-size:32px;
+    font-weight:700;
+    color:#ff4d4d;
+}
+
+.sub-text{
+    opacity:0.7;
+    margin-top:5px;
+}
